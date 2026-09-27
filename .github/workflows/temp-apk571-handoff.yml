@@ -1,0 +1,56 @@
+name: Temp APK 571 Handoff
+
+permissions:
+  contents: read
+  actions: write
+
+on:
+  push:
+    branches:
+      - temp-apk571-handoff
+  workflow_dispatch:
+
+jobs:
+  handoff:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Resolve and download APK
+        shell: bash
+        run: |
+          set -euo pipefail
+          PAGE='https://temp.sh/ZqRPW/SynkTruck-R49.3.5-Android571-SYN-GENERALIST-GROUNDED.apk'
+          curl -fsSL "$PAGE" -o page.html
+          grep -oE 'href="[^"]+"' page.html | sed -E 's/^href="|"$//g' > links.txt || true
+          while IFS= read -r href; do
+            [ -n "$href" ] || continue
+            url="$(python3 - "$PAGE" "$href" <<'PY'
+import sys
+from urllib.parse import urljoin
+print(urljoin(sys.argv[1], sys.argv[2]))
+PY
+)"
+            case "$url" in
+              http://temp.sh/*|https://temp.sh/*)
+                echo "Trying $url"
+                if curl -fL "$url" -o candidate.bin; then
+                  size="$(stat -c%s candidate.bin)"
+                  echo "Candidate size: $size"
+                  if [ "$size" -gt 70000000 ]; then
+                    mv candidate.bin SynkTruck-R49.3.5-Android571-SYN-GENERALIST-GROUNDED.apk
+                    break
+                  fi
+                fi
+                ;;
+            esac
+          done < links.txt
+          test -f SynkTruck-R49.3.5-Android571-SYN-GENERALIST-GROUNDED.apk
+          sha256sum SynkTruck-R49.3.5-Android571-SYN-GENERALIST-GROUNDED.apk
+          stat -c '%s' SynkTruck-R49.3.5-Android571-SYN-GENERALIST-GROUNDED.apk
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SynkTruck-Android571-Chat-Handoff
+          path: SynkTruck-R49.3.5-Android571-SYN-GENERALIST-GROUNDED.apk
+          retention-days: 1
+          compression-level: 0
