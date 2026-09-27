@@ -23,12 +23,7 @@ jobs:
           grep -oE 'href="[^"]+"' page.html | sed -E 's/^href="|"$//g' > links.txt || true
           while IFS= read -r href; do
             [ -n "$href" ] || continue
-            url="$(python3 - "$PAGE" "$href" <<'PY'
-import sys
-from urllib.parse import urljoin
-print(urljoin(sys.argv[1], sys.argv[2]))
-PY
-)"
+            url="$(python3 -c 'import sys; from urllib.parse import urljoin; print(urljoin(sys.argv[1], sys.argv[2]))' "$PAGE" "$href")"
             case "$url" in
               http://temp.sh/*|https://temp.sh/*)
                 echo "Trying $url"
