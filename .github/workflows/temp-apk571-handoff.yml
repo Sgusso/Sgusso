@@ -1,4 +1,4 @@
-name: Temp APK 571 Handoff
+name: Temp APK 571 Artifact Handoff
 
 permissions:
   contents: read
@@ -14,33 +14,12 @@ jobs:
   handoff:
     runs-on: ubuntu-latest
     steps:
-      - name: Resolve and download APK
-        shell: bash
+      - name: Download exact APK 571
         run: |
           set -euo pipefail
-          PAGE='https://temp.sh/ZqRPW/SynkTruck-R49.3.5-Android571-SYN-GENERALIST-GROUNDED.apk'
-          curl -fsSL "$PAGE" -o page.html
-          grep -oE 'href="[^"]+"' page.html | sed -E 's/^href="|"$//g' > links.txt || true
-          while IFS= read -r href; do
-            [ -n "$href" ] || continue
-            url="$(python3 -c 'import sys; from urllib.parse import urljoin; print(urljoin(sys.argv[1], sys.argv[2]))' "$PAGE" "$href")"
-            case "$url" in
-              http://temp.sh/*|https://temp.sh/*)
-                echo "Trying $url"
-                if curl -fL "$url" -o candidate.bin; then
-                  size="$(stat -c%s candidate.bin)"
-                  echo "Candidate size: $size"
-                  if [ "$size" -gt 70000000 ]; then
-                    mv candidate.bin SynkTruck-R49.3.5-Android571-SYN-GENERALIST-GROUNDED.apk
-                    break
-                  fi
-                fi
-                ;;
-            esac
-          done < links.txt
-          test -f SynkTruck-R49.3.5-Android571-SYN-GENERALIST-GROUNDED.apk
-          sha256sum SynkTruck-R49.3.5-Android571-SYN-GENERALIST-GROUNDED.apk
-          stat -c '%s' SynkTruck-R49.3.5-Android571-SYN-GENERALIST-GROUNDED.apk
+          curl -fL "https://qurl.sh/9b9fd1737e5d495f/SynkTruck-R49.3.5-Android571-SYN-GENERALIST-GROUNDED.apk" -o SynkTruck-R49.3.5-Android571-SYN-GENERALIST-GROUNDED.apk
+          test "$(stat -c%s SynkTruck-R49.3.5-Android571-SYN-GENERALIST-GROUNDED.apk)" -eq 70938183
+          echo "93bc8a69cc7b226549632d470433c1253ceb533b5ca7a77c43e4556bb9737114  SynkTruck-R49.3.5-Android571-SYN-GENERALIST-GROUNDED.apk" | sha256sum -c -
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
