@@ -1,4 +1,4 @@
-name: Temp APK 573 Google Artifact Handoff
+name: Temp APK 574 Artifact Handoff
 
 permissions:
   contents: read
@@ -17,18 +17,18 @@ jobs:
       - name: Checkout handoff metadata
         uses: actions/checkout@v4
 
-      - name: Download exact APK 573 Google
+      - name: Download exact APK 574
         run: |
           set -euo pipefail
-          URL="$(cat APK573_GOOGLE_URL.txt)"
-          curl -fL "$URL" -o SynkTruck-R49.3.5-Android573-SYN-GENERALIST-GOOGLE-ONLINE.apk
-          test "$(stat -c%s SynkTruck-R49.3.5-Android573-SYN-GENERALIST-GOOGLE-ONLINE.apk)" -eq 70952735
-          echo "cf1e4ca7c7c264e94bf2ceed718ee7a274c5e782981267bf97eb38151ced9993  SynkTruck-R49.3.5-Android573-SYN-GENERALIST-GOOGLE-ONLINE.apk" | sha256sum -c -
+          URL="$(cat APK574_URL.txt)"
+          curl -fL "$URL" -o SynkTruck-R49.3.5-Android574-SYN-WEATHER-STABLE-SIGNING.apk
+          test "$(stat -c%s SynkTruck-R49.3.5-Android574-SYN-WEATHER-STABLE-SIGNING.apk)" -eq 70953267
+          echo "4c9657c1953c51c789fbe545ee7df2eb9180cdca96671a7f900904af16eb0e8a  SynkTruck-R49.3.5-Android574-SYN-WEATHER-STABLE-SIGNING.apk" | sha256sum -c -
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: SynkTruck-Android573-Google-Chat-Handoff
-          path: SynkTruck-R49.3.5-Android573-SYN-GENERALIST-GOOGLE-ONLINE.apk
+          name: SynkTruck-Android574-Chat-Handoff
+          path: SynkTruck-R49.3.5-Android574-SYN-WEATHER-STABLE-SIGNING.apk
           retention-days: 1
           compression-level: 0
