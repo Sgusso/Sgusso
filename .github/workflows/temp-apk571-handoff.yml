@@ -1,4 +1,4 @@
-name: Temp APK 571 Artifact Handoff
+name: Temp APK 572 Artifact Handoff
 
 permissions:
   contents: read
@@ -14,17 +14,21 @@ jobs:
   handoff:
     runs-on: ubuntu-latest
     steps:
-      - name: Download exact APK 571
+      - name: Checkout handoff metadata
+        uses: actions/checkout@v4
+
+      - name: Download exact APK 572
         run: |
           set -euo pipefail
-          curl -fL "https://qurl.sh/9b9fd1737e5d495f/SynkTruck-R49.3.5-Android571-SYN-GENERALIST-GROUNDED.apk" -o SynkTruck-R49.3.5-Android571-SYN-GENERALIST-GROUNDED.apk
-          test "$(stat -c%s SynkTruck-R49.3.5-Android571-SYN-GENERALIST-GROUNDED.apk)" -eq 70938183
-          echo "93bc8a69cc7b226549632d470433c1253ceb533b5ca7a77c43e4556bb9737114  SynkTruck-R49.3.5-Android571-SYN-GENERALIST-GROUNDED.apk" | sha256sum -c -
+          URL="$(cat APK572_URL.txt)"
+          curl -fL "$URL" -o SynkTruck-R49.3.5-Android572-SYN-GENERALIST-GOOGLE-GROUNDED.apk
+          test "$(stat -c%s SynkTruck-R49.3.5-Android572-SYN-GENERALIST-GOOGLE-GROUNDED.apk)" -eq 70938067
+          echo "aec508c4384a74b5004d301663934930167441c46ace1e3d46ac267794f3f84b  SynkTruck-R49.3.5-Android572-SYN-GENERALIST-GOOGLE-GROUNDED.apk" | sha256sum -c -
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: SynkTruck-Android571-Chat-Handoff
-          path: SynkTruck-R49.3.5-Android571-SYN-GENERALIST-GROUNDED.apk
+          name: SynkTruck-Android572-Chat-Handoff
+          path: SynkTruck-R49.3.5-Android572-SYN-GENERALIST-GOOGLE-GROUNDED.apk
           retention-days: 1
           compression-level: 0
