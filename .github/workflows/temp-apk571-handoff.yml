@@ -21,14 +21,14 @@ jobs:
         run: |
           set -euo pipefail
           URL="$(cat APK574_URL.txt)"
-          curl -fL "$URL" -o SynkTruck-R49.3.5-Android574-SYN-NATIVE-WEATHER-STABLE-SIGN.apk
-          test "$(stat -c%s SynkTruck-R49.3.5-Android574-SYN-NATIVE-WEATHER-STABLE-SIGN.apk)" -eq 70953051
-          echo "3ec1e89a68c7216faa9dbe188238ea4d3d2ab47162a6fea1fdc7e1f5a9b6c896  SynkTruck-R49.3.5-Android574-SYN-NATIVE-WEATHER-STABLE-SIGN.apk" | sha256sum -c -
+          curl -fL "$URL" -o SynkTruck-R49.3.5-Android574-SYN-GENERALIST-OPEN-DATA-STABLE.apk
+          test "$(stat -c%s SynkTruck-R49.3.5-Android574-SYN-GENERALIST-OPEN-DATA-STABLE.apk)" -eq 70939491
+          echo "577c9d9aab87b75ffbc679517ea56b0ffd03cfff8291a791937852419ab0d90e  SynkTruck-R49.3.5-Android574-SYN-GENERALIST-OPEN-DATA-STABLE.apk" | sha256sum -c -
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: SynkTruck-Android574-Chat-Handoff
-          path: SynkTruck-R49.3.5-Android574-SYN-NATIVE-WEATHER-STABLE-SIGN.apk
+          path: SynkTruck-R49.3.5-Android574-SYN-GENERALIST-OPEN-DATA-STABLE.apk
           retention-days: 1
           compression-level: 0
